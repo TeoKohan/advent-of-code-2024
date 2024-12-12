@@ -1,6 +1,13 @@
 from typing import Self
 
 class Vector2:
+    
+    def orthogonal():
+        yield Vector2( 0, -1)
+        yield Vector2( 1,  0)
+        yield Vector2( 0,  1)
+        yield Vector2(-1,  0)
+
     def __init__(self: Self, x, y) -> None:
         self.x = x
         self.y = y
