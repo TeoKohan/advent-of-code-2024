@@ -1,7 +1,6 @@
 import re
 import numpy as np
 
-
 from vector2 import Vector2
 from itertools import count
 from copy import deepcopy
