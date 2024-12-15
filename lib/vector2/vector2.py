@@ -63,7 +63,7 @@ class Vector2:
         return self * -1
 
     def __repr__(self: Self) -> str:
-        return f"({self.x}, {self.y})"
+        return f"V2({self.x}, {self.y})"
 
     def __hash__(self: Self) -> str:
         return hash(repr(self))
