@@ -2,6 +2,19 @@ from typing import Self
 
 class Vector2:
     
+    def zero() -> Self:
+        return Vector2( 0,  0)
+    def one() -> Self:
+        return Vector2( 1,  1)
+    def up() -> Self:
+        return Vector2(-1,  0)
+    def right() -> Self:
+        return Vector2( 0,  1)
+    def down() -> Self:
+        return Vector2( 1,  0)
+    def left() -> Self:
+        return Vector2( 0, -1)
+    
     def orthogonal():
         yield Vector2( 0, -1)
         yield Vector2( 1,  0)
@@ -9,8 +22,8 @@ class Vector2:
         yield Vector2(-1,  0)
 
     def __init__(self: Self, x, y) -> None:
-        self.x = x
-        self.y = y
+        self.x: int = x
+        self.y: int = y
 
     def __copy__(self: Self) -> Self:
         return Vector2(self.x, self.y)
@@ -33,11 +46,18 @@ class Vector2:
     def __sub__(self: Self, v: Self) -> Self:
         return Vector2(self.x - v.x, self.y - v.y)
 
-    def __mul__(self: Self, s: Self) -> Self:
-        return Vector2(self.x * s, self.y * s)
+    def __mul__(self: Self, s: int | Self) -> Self:
+        if isinstance(s, int):
+            return Vector2(self.x * s, self.y * s)
+        if isinstance(s, Vector2):
+            return Vector2(self.x * s.x, self.y * s.y)
+        else:
+            raise TypeError()
     
-    def __rmul__(self: Self, s: Self) -> Self:
-        return self.__mul__(s)
+    __rmul__ = __mul__
+
+    def __matmul__ (self: Self, s: Self) -> int:
+        return self.x * s.x + self.y * s.y
 
     def __neg__(self: Self) -> Self:
         return self * -1
