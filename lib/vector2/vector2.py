@@ -2,6 +2,9 @@ from typing import Self
 
 class Vector2:
     
+    def taxicab_distance(u: Self, v: Self) -> int:
+        return abs(u.x - v.x) + abs(u.y - v.y)
+
     def zero() -> Self:
         return Vector2( 0,  0)
     def one() -> Self:
@@ -37,14 +40,34 @@ class Vector2:
     def rotate_clockwise(self: Self) -> None:
         self.x, self.y = -self.y, self.x
 
+    def rotated_clockwise(self: Self) -> Self:
+        return Vector2(-self.y, self.x)
+
     def rotate_counter_clockwise(self: Self) -> None:
         self.x, self.y = self.y, -self.x
+    
+    def rotated_counter_clockwise(self: Self) -> Self:
+        return Vector2(self.y, -self.x)
+    
+    def mirror(self: Self) -> None:
+        self.x, self.y = -self.x, -self.y
+
+    def mirrored(self: Self) -> Self:
+        return Vector2(-self.y, -self.x)
 
     def __add__(self: Self, v: Self) -> Self:
         return Vector2(self.x + v.x, self.y + v.y)
     
+    def __iadd__(self: Self, v: Self):
+        self.x += v.x
+        self.y += v.y
+    
     def __sub__(self: Self, v: Self) -> Self:
         return Vector2(self.x - v.x, self.y - v.y)
+
+    def __isub__(self: Self, v: Self) -> Self:
+        self.x -= v.x
+        self.y -= v.y
 
     def __mul__(self: Self, s: int | Self) -> Self:
         if isinstance(s, int):
@@ -55,6 +78,18 @@ class Vector2:
             raise TypeError()
     
     __rmul__ = __mul__
+
+    def __imul__(self: Self, s: int | Self):
+        if isinstance(s, int):
+            self.x *= s
+            self.y *= s
+        if isinstance(s, Vector2):
+            self.x *= s.x
+            self.y *= s.y
+        else:
+            raise TypeError()
+
+    __irmul__ = __imul__
 
     def __matmul__ (self: Self, s: Self) -> int:
         return self.x * s.x + self.y * s.y
