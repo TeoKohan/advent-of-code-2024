@@ -61,6 +61,7 @@ class Vector2:
     def __iadd__(self: Self, v: Self):
         self.x += v.x
         self.y += v.y
+        return self
     
     def __sub__(self: Self, v: Self) -> Self:
         return Vector2(self.x - v.x, self.y - v.y)
@@ -68,6 +69,7 @@ class Vector2:
     def __isub__(self: Self, v: Self) -> Self:
         self.x -= v.x
         self.y -= v.y
+        return self
 
     def __mul__(self: Self, s: int | Self) -> Self:
         if isinstance(s, int):
@@ -83,9 +85,11 @@ class Vector2:
         if isinstance(s, int):
             self.x *= s
             self.y *= s
+            return self
         if isinstance(s, Vector2):
             self.x *= s.x
             self.y *= s.y
+            return self
         else:
             raise TypeError()
 
@@ -99,9 +103,6 @@ class Vector2:
 
     def __repr__(self: Self) -> str:
         return f"V2({self.x}, {self.y})"
-
-    def __hash__(self: Self) -> str:
-        return hash(repr(self))
 
     def __iter__(self: Self):
         yield self.x
