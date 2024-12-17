@@ -8,30 +8,30 @@ with open('input') as input:
     width: int = len(data)
     height: int = len(data[0])
 
-    antennas: dict[Vector2, set] = defaultdict(set)
+    antennas: dict[str, set[tuple[int, int]]] = defaultdict(set)
     for i, j in product(range(width), range(height)):
         if data[i][j] != '.':
-            antennas[data[i][j]].add(Vector2(i, j))
+            antennas[data[i][j]].add((i, j))
 
-def simple_antinodes(antennas: dict[Vector2, set], width: int, height: int) -> set[Vector2]:
+def simple_antinodes(antennas: dict[str, set[tuple[int, int]]], width: int, height: int) -> set[tuple[int, int]]:
     antinodes = set()
-    for ant_A, ant_B in ((ant_A, ant_B) for antenna in antennas for ant_A, ant_B in product(antennas[antenna], antennas[antenna]) if ant_A != ant_B):
+    for ant_A, ant_B in ((Vector2(*ant_A), Vector2(*ant_B)) for antenna in antennas for ant_A, ant_B in product(antennas[antenna], antennas[antenna]) if ant_A != ant_B):
         antinode_a = 2 * ant_A - ant_B
         antinode_b = 2 * ant_B - ant_A
-        antinodes.update([antinode_a, antinode_b])
-    return set([node for node in antinodes if 0 <= node.x < height and 0 <= node.y < width])
+        antinodes.update([tuple(antinode_a), tuple(antinode_b)])
+    return set([(x, y) for x, y in antinodes if 0 <= x < height and 0 <= y < width])
 
-def complex_antinodes(antennas: dict[Vector2, set], width: int, height: int) -> set[Vector2]:
+def complex_antinodes(antennas: dict[str, set[tuple[int, int]]], width: int, height: int) -> set[tuple[int, int]]:
 
-    def propagate(origin: Vector2, direction: Vector2, width: int, height: int) -> set[Vector2]:
+    def propagate(origin: Vector2, direction: Vector2, width: int, height: int) -> set[tuple[int, int]]:
         result = set()
         while 0 <= origin.x < height and 0 <= origin.y < width:
-            result.add(origin)
+            result.add(tuple(origin))
             origin += direction
         return result
 
     antinodes = set()
-    for ant_A, ant_B in ((ant_A, ant_B) for antenna in antennas for ant_A, ant_B in product(antennas[antenna], antennas[antenna]) if ant_A != ant_B):
+    for ant_A, ant_B in ((Vector2(*ant_A), Vector2(*ant_B)) for antenna in antennas for ant_A, ant_B in product(antennas[antenna], antennas[antenna]) if ant_A != ant_B):
             antinode_direction = ant_A - ant_B
             antinodes.update(propagate(ant_A,  antinode_direction, width, height))
             antinodes.update(propagate(ant_B, -antinode_direction, width, height))
