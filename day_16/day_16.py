@@ -62,8 +62,6 @@ def best_tiles(M: dict[tuple[FrozenV2, FrozenV2], int], maze: list[list[str]], s
     
     return solution
 
-
-
 flood(solutions, maze, end)
 
 with open('output', 'w') as output:
