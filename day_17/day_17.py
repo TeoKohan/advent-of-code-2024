@@ -1,8 +1,7 @@
 import re
 from enum import Enum
-from operator import eq
 from functools import reduce
-from itertools import product, zip_longest, batched
+from itertools import product, zip_longest
     
 class Register(Enum):
     A  = 0
