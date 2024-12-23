@@ -1,8 +1,6 @@
 from typing import Self
 from collections import deque, defaultdict
 from itertools import product
-import time
-from copy import deepcopy
 from vector2 import Vector2
 
 with open('input') as input:
