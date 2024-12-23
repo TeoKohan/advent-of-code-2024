@@ -7,13 +7,6 @@ with open('input') as input:
     obstacles = input.read().splitlines()
     obstacles = [Vector2(*map(int, re.findall(r'\d+', obstacle))) for obstacle in obstacles]
 
-def print_board(board: list[list[str]]):
-    print(
-        '\n'.join(
-            ''.join(letter for letter in line) for line in board
-        )
-    )
-
 class Node():
 
     def __init__(self, position: Vector2, parent: None | Self):
