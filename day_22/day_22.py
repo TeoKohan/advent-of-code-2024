@@ -1,6 +1,7 @@
 from typing import Generator
 from collections import defaultdict
-from itertools import islice, tee
+from operator import sub
+from itertools import islice, tee, starmap
 
 with open('input') as input:
     secret_codes: list[str] = input.read().splitlines()
@@ -20,17 +21,16 @@ def two_thousandth_monkey(secret_codes: list[int]) -> int:
     return sum([next(m) for m in monkeys])
 
 def savvy_monkeys(secret_codes: list[int]) -> int:
+
+    stop_sequence_values: dict[tuple[int, int, int, int], int] = defaultdict(lambda: 0)
+
     monkeys: list[list[int]] = [list(islice(monkey(m), 2000)) for m in secret_codes]
     monkey_values: list[list[int]] = [[d % 10 for d in m] for m in monkeys]
 
-    def differences(monkey_values: list[int]) -> list[int]:
-        pairs: list[tuple[int, int]] = zip(monkey_values[1:], monkey_values)
-        return [actual - previous for actual, previous in pairs]
-    
-    monkey_deltas: list[list[int]] = [*map(differences, monkey_values)]
+    for values in monkey_values:
+        
+        deltas: list[list[int]] = starmap(sub, zip(values[1:], values))
 
-    stop_sequence: dict[tuple[int, int, int, int], int] = defaultdict(lambda: 0)
-    for values, deltas in zip(monkey_values, monkey_deltas):
         a, b = tee(deltas)
         next(b)
         b, c = tee(b)
@@ -38,15 +38,15 @@ def savvy_monkeys(secret_codes: list[int]) -> int:
         c, d = tee(c)
         next(d)
         v = iter(values[4:])
-
         sequence_values = zip(v, a, b, c, d)
+
         visited = set()
         for value, *sequence in sequence_values:
             if tuple(sequence) not in visited:
                 visited.add(tuple(sequence))
-                stop_sequence[tuple(sequence)] += value
-                
-    return(max(stop_sequence.values()))
+                stop_sequence_values[tuple(sequence)] += value
+
+    return(max(stop_sequence_values.values()))
 
 with open('output', 'w') as output:
     output.write( str(two_thousandth_monkey(secret_codes)) + '\n')
