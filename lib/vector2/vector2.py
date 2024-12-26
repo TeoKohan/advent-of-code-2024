@@ -49,11 +49,11 @@ class Vector2:
     def rotated_counter_clockwise(self: Self) -> Self:
         return Vector2(self.y, -self.x)
     
-    def mirror(self: Self) -> None:
-        self.x, self.y = -self.x, -self.y
-
-    def mirrored(self: Self) -> Self:
-        return Vector2(-self.y, -self.x)
+    def x_project(self: Self) -> Self:
+        return Vector2(self.x, 0)
+    
+    def y_project(self: Self) -> Self:
+        return Vector2(0, self.y)
 
     def __add__(self: Self, v: Self) -> Self:
         return Vector2(self.x + v.x, self.y + v.y)
